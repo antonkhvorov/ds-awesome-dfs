@@ -1,6 +1,6 @@
 # Distributed File System
 
-Rustam Gafarov
-Anton Khvorov
-Evgenia Lyashenko
-Alexander Simonenko
+* Rustam Gafarov
+* Anton Khvorov
+* Evgenia Lyashenko
+* Alexander Simonenko

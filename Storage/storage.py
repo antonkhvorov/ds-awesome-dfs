@@ -7,15 +7,11 @@ def connect_to_naming(naming_ip):
     sock = socket.socket()
 
     sock.connect((naming_ip, 9000))
-    sock.send('hello, world!')
 
-    data = sock.recv(1024)
-    sock.close()
-
-    print data
+    print "connected to", naming_ip
     sys.stdout.flush()
 
-    sleep(60)
+    sleep(30)
 
 
 if __name__ == "__main__":

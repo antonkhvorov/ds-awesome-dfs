@@ -4,8 +4,6 @@ WORKDIR /storage_app
 
 ADD . /storage_app
 
-# RUN pip install -r storage_requirements.txt
-
 # connection from clients
 EXPOSE 9001
 

@@ -1,22 +1,19 @@
 import socket
 import sys
+from time import sleep
+from threading import Thread
 
 
-def listen_for_storage_connection():
+def listen_for_storage_connection(connected_storages):
     sock = socket.socket()
     sock.bind(('', 9000))
     sock.listen(1000)
     while True:
         conn, address = sock.accept()
+        connected_storages.append(address[0])
 
-        print 'connected:', address
+        print 'Host connected:', address
         sys.stdout.flush()
-
-        while True:
-            data = conn.recv(1024)
-            if not data:
-                break
-            conn.send(data.upper())
 
         conn.close()
 
@@ -26,4 +23,8 @@ if __name__ == "__main__":
     print "my ip is", my_ip
     sys.stdout.flush()
 
-    listen_for_storage_connection()
+    connected_storages = list()
+    t1 = Thread(target=listen_for_storage_connection, args=(connected_storages,))
+    t1.start()
+
+

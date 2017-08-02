@@ -4,8 +4,6 @@ WORKDIR /naming_app
 
 ADD . /naming_app
 
-#RUN pip install -r storage_requirements.txt
-
 # connection from Clients
 EXPOSE 9000
 
