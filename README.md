@@ -23,3 +23,8 @@ cd Storage
 docker build -t storage .
 docker run -e NAMING_IP=<naming node ip> storage
 ```
+
+#### In client machine:
+```
+python dfs.py <naming node ip>
+```
