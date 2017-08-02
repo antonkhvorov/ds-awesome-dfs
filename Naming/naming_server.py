@@ -2,6 +2,7 @@ import socket
 import sys
 from time import sleep
 from threading import Thread
+from commands import *
 
 
 def listen_for_storage_connection(connected_storages):
@@ -12,11 +13,46 @@ def listen_for_storage_connection(connected_storages):
         conn, address = sock.accept()
         connected_storages.append(address[0])
 
-        print 'Host connected:', address
+        print 'Storage connected:', address
         sys.stdout.flush()
 
         conn.close()
 
+
+def listen_for_clients_commands():
+    sock = socket.socket()
+    sock.bind(('', 9001))
+    sock.listen(1000)
+    while True:
+        conn, address = sock.accept()
+        connected_storages.append(address[0])
+
+        print 'Client connected:', address
+        sys.stdout.flush()
+
+        request = conn.recv(1024)  # 1 KB
+
+        command = request.split()[0]
+        args = request.split()[1:]
+
+        if command == "pwd":
+            response = pwd()
+        elif command == "ls":
+            response = ls()
+        elif command == "cd":
+            response = cd(args)
+        elif command == "mkdir":
+            response = mkdir(args)
+        elif command == "touch":
+            response = touch(args)
+        elif command == "cp":
+            response = cp(args)
+        elif command == "rm":
+            response = rm(args)
+
+        conn.send(response)
+
+        conn.close()
 
 if __name__ == "__main__":
     my_ip = socket.gethostbyname(socket.gethostname())
@@ -26,5 +62,8 @@ if __name__ == "__main__":
     connected_storages = list()
     t1 = Thread(target=listen_for_storage_connection, args=(connected_storages,))
     t1.start()
+
+    t2 = Thread(target=listen_for_clients_commands, args=())
+    t2.start()
 
 
