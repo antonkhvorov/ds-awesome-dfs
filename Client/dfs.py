@@ -13,17 +13,17 @@ def ls(response):
     pass
 
 
-def cd():
+def cd(response):
     # TODO: implement method
     pass
 
 
-def mkdir():
+def mkdir(response):
     # TODO: implement method
     pass
 
 
-def touch():
+def touch(response):
     # TODO: implement method
     pass
 
@@ -39,7 +39,7 @@ def rm(response):
 
 
 def help(args):
-    print "Use $s <namig server ip> <command> [<arguments>]" % args[0]
+    print "Use $s <naming server ip> <command> [<arguments>]" % args[0]
     # TODO: describe all commands
 
 
@@ -73,23 +73,21 @@ def execute(args):
     message = ' '.join(args[2:]) # command and arguments
     sock.send(message)
 
+    response = sock.recv(1024)  # 1 KB
+
     if command == "pwd":
-        response = sock.recv(1024)  # 1 KB
         pwd(response)
     elif command == "ls":
-        response = sock.recv(1024)  # 1 KB
         ls(response)
     elif command == "cd":
-        cd()
+        cd(response)
     elif command == "mkdir":
-        mkdir()
+        mkdir(response)
     elif command == "touch":
-        touch()
+        touch(response)
     elif command == "cp":
-        response = sock.recv(1048576)  # 1 MB
         cp(response)
     elif command == "rm":
-        response = sock.recv(1048576)  # 1 MB
         rm(response)
 
     sock.close()
