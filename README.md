@@ -8,23 +8,23 @@
 # How to run
 
 Instead of different machines you could use different consoles
-#### In Naming node:
+#### On Naming node:
 
 ```
 cd Naming
 docker build -t naming .
-docker run -p 9000:9000 naming
+docker run -p 9000:9000 -p 9001:9001 naming
 ```
 Remember naming node ip.
 
-#### In each storage nodes:
+#### On each storage nodes:
 ```
 cd Storage
 docker build -t storage .
-docker run -e NAMING_IP=<naming node ip> storage
+docker run -e NAMING_IP=<naming node ip> -p 9002:9002 -p 9003:9003 storage
 ```
 
-#### In client machine:
+#### On client machine:
 ```
 python dfs.py <naming node ip>
 ```
