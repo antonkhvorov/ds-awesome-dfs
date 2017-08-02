@@ -5,10 +5,10 @@ WORKDIR /storage_app
 ADD . /storage_app
 
 # connections from clients
-EXPOSE 9001
+EXPOSE 9002
 
 # connection for the heartbeat
-EXPOSE 9002
+EXPOSE 9003
 
 ENV NAME Storage
 

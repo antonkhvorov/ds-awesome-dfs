@@ -4,10 +4,10 @@ WORKDIR /naming_app
 
 ADD . /naming_app
 
-# connection from Clients
+# connection for Storage servers
 EXPOSE 9000
 
-# connection to Naming
+# connection for Clients
 EXPOSE 9001
 
 ENV NAME Naming
