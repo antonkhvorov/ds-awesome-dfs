@@ -1,6 +1,11 @@
+import shutil
 import socket
 from commands import *
 import sys
+import tempfile
+
+from Client.message_generator import generate_message
+from commands import *
 
 
 def execute(sock, args):
@@ -26,11 +31,19 @@ def execute(sock, args):
         print "Command %s should has arguments" % command
         help()
         return
+    # create temp directory
+    temp_dir = tempfile.mkdtemp()
 
     message = ' '.join(args) # command and arguments
     sock.send(message)
 
     response = sock.recv(1024)  # 1 KB
+
+    if response != "200":
+        print response
+        # remove temp directory
+        shutil.rmtree(temp_dir)
+        return
 
     if command == "pwd":
         pwd(response)
@@ -42,14 +55,15 @@ def execute(sock, args):
         mkdir(response)
     elif command == "touch":
         touch(response)
-    elif command == "scp":
-        scp(response)
+    elif command == "cp":
+        cp(response)
     elif command == "rm":
         rm(response)
     elif command == "stat":
         stat(response)
 
-
+    # remove temp directory
+    shutil.rmtree(temp_dir)
 
 
 if __name__ == "__main__":

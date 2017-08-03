@@ -40,8 +40,8 @@ def clients_commands(conn):
             response = mkdir(client_pwd, args)
         elif command == "touch":
             response = touch(client_pwd, args)
-        elif command == "scp":
-            response = scp(client_pwd, args)
+        elif command == "cp":
+            response = cp(client_pwd,connected_storages, args)
         elif command == "rm":
             response = rm(client_pwd, args)
         elif command == "stat":
@@ -73,7 +73,7 @@ def send_heartbeat(connected_storages):
             sock.settimeout(10)
 
             data = sock.recv(1024)  # 1 KB
-            if not data:            # if we have not received answer from the Storage Server during heartbeat
+            if not data:  # if we have not received answer from the Storage Server during heartbeat
                 # PERFORM TRANSFER FUNCTION
 
                 pass
@@ -81,14 +81,13 @@ def send_heartbeat(connected_storages):
         sleep(60)
 
 
-#   def transfer_to_another_storage():
+# def transfer_to_another_storage():
 
 
 if __name__ == "__main__":
     my_ip = socket.gethostbyname(socket.gethostname())
     print "my ip is", my_ip
     sys.stdout.flush()
-
     connected_storages = list()
     t1 = Thread(target=listen_for_storage_connection, args=(connected_storages,))
     t1.start()
@@ -98,5 +97,3 @@ if __name__ == "__main__":
 
     heartBeatThread = Thread(target=send_heartbeat, args=(connected_storages,))
     heartBeatThread.start()
-
-
