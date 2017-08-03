@@ -38,6 +38,6 @@ def rm(response):
     print response
 
 
-def help(args):
-    print "Use %s <naming server ip> <command> [<arguments>]" % args[0]
+def help():
+    print "Use <command> [<arguments>]"
     # TODO: describe all commands

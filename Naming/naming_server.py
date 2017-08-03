@@ -19,23 +19,21 @@ def listen_for_storage_connection(connected_storages):
         conn.close()
 
 
-def listen_for_clients_commands():
-    sock = socket.socket()
-    sock.bind(('', 9001))
-    sock.listen(1000)
+def clients_commands(conn):
+    client_pwd = "/"
     while True:
-        conn, address = sock.accept()
-        connected_storages.append(address[0])
-
-        print 'Client connected:', address
-        sys.stdout.flush()
-
         request = conn.recv(1024)  # 1 KB
 
         command = request.split()[0]
         args = request.split()[1:]
 
-        if command == "pwd":
+        print "request", command, args
+        sys.stdout.flush()
+
+        if command == "quit":
+            conn.close()
+            break
+        elif command == "pwd":
             response = pwd()
         elif command == "ls":
             response = ls()
@@ -54,7 +52,20 @@ def listen_for_clients_commands():
 
         conn.send(response)
 
-        conn.close()
+
+def listen_for_clients_connections():
+    sock = socket.socket()
+    sock.bind(('', 9001))
+    sock.listen(1000)
+    while True:
+        conn, address = sock.accept()
+        connected_storages.append(address[0])
+
+        print 'Client connected:', address
+        sys.stdout.flush()
+
+        t = Thread(target=clients_commands, args=(conn,))
+        t.start()
 
 
 def send_heartbeat(connected_storages):
@@ -85,7 +96,7 @@ if __name__ == "__main__":
     t1 = Thread(target=listen_for_storage_connection, args=(connected_storages,))
     t1.start()
 
-    t2 = Thread(target=listen_for_clients_commands, args=())
+    t2 = Thread(target=listen_for_clients_connections, args=())
     t2.start()
 
     heartBeatThread = Thread(target=send_heartbeat, args=(connected_storages,))

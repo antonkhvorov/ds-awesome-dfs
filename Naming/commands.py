@@ -1,11 +1,11 @@
 def pwd():
     # TODO: implement method
-    return ''
+    return ' '
 
 
 def ls():
     # TODO: implement method
-    return ''
+    return ' '
 
 
 def cd(args):

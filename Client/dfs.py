@@ -1,37 +1,33 @@
 import socket
-from time import sleep
 from commands import *
 import sys
 
 
-def execute(args):
-    if len(args) < 3:
-        help(args)
-        return
+def execute(sock, args):
+    command = args[0]
 
-    command = args[2]
+    if command == "quit":
+        sock.close()
+        exit(0)
 
     if command == "help":
-        help(args)
+        help()
         return
 
-    no_args_commands = ["pwd", "ls"]
+    no_args_commands = ["quit", "pwd", "ls"]
 
     commands_with_args = ["cd", "mkdir", "touch", "scp", "rm", "stat"]
-    if command not in no_args_commands and command not in commands_with_args:
+    if command not in no_args_commands + commands_with_args:
         print "There is no command %s" % command
-        help(args)
+        help()
         return
 
-    if command not in no_args_commands and len(args) < 4:
+    if command in commands_with_args and len(args) < 2:
         print "Command %s should has arguments" % command
-        help(args)
+        help()
         return
 
-    naming_ip = args[1]
-    sock = socket.socket()
-    sock.connect((naming_ip, 9001))
-    message = ' '.join(args[2:]) # command and arguments
+    message = ' '.join(args) # command and arguments
     sock.send(message)
 
     response = sock.recv(1024)  # 1 KB
@@ -53,10 +49,16 @@ def execute(args):
     elif command == "stat":
         stat(response)
 
-    sock.close()
+
 
 
 if __name__ == "__main__":
     my_ip = socket.gethostbyname(socket.gethostname())
 
-    execute(sys.argv)
+    naming_ip = sys.argv[1]
+    sock = socket.socket()
+    sock.connect((naming_ip, 9001))
+
+    while True:
+        args = raw_input()
+        execute(sock, args.split())
