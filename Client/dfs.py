@@ -1,10 +1,8 @@
 import shutil
 import socket
-from commands import *
 import sys
 import tempfile
 
-from Client.message_generator import generate_message
 from commands import *
 
 

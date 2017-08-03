@@ -41,7 +41,7 @@ def clients_commands(conn):
         elif command == "touch":
             response = touch(client_pwd, args)
         elif command == "cp":
-            response = cp(client_pwd,connected_storages, args)
+            response = cp(client_pwd, connected_storages, args)
         elif command == "rm":
             response = rm(client_pwd, args)
         elif command == "stat":

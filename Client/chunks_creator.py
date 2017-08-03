@@ -30,7 +30,8 @@ def create_chunks(file_object, temp_dir, chunk_size=1024):
                     last_word = ch
                     work_chunk_size = chunk_size
             # create chunk in the temp directory with the path as original file
-            chunk_name = temp_dir + os.path.abspath(file_object) + '/chunk ' + str(num) + '_' + os.path.basename(file_object)
+            chunk_name = temp_dir + os.path.abspath(file_object) + '/chunk ' + str(num) + '_' + os.path.basename(
+                file_object)
             if not os.path.exists(os.path.dirname(chunk_name)):
                 os.makedirs(os.path.dirname(chunk_name))
             with open(chunk_name, "wb") as out_file:

@@ -4,11 +4,10 @@ import os
 def pwd(response):
     print response
 
-
 def ls(response):
     # TODO: implement method
-    print response
 
+    print response
 
 def cd(response):
     # TODO: implement method

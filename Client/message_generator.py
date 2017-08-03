@@ -9,7 +9,6 @@ def generate_message(command, temp_dir, args):
 
     pass
 
-
 # args[0] - filename
 def generate_cp_message(temp_dir, args):
     # file name
