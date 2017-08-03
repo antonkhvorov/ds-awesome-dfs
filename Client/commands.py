@@ -1,5 +1,4 @@
 def pwd(response):
-    # TODO: implement method
     print response
 
 

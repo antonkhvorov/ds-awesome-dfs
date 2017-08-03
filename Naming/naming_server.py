@@ -27,28 +27,25 @@ def clients_commands(conn):
         command = request.split()[0]
         args = request.split()[1:]
 
-        print "request", command, args
-        sys.stdout.flush()
-
         if command == "quit":
             conn.close()
             break
         elif command == "pwd":
-            response = pwd()
+            response = pwd(client_pwd)
         elif command == "ls":
-            response = ls()
+            response = ls(client_pwd)
         elif command == "cd":
-            response = cd(args)
+            response = cd(client_pwd, args)
         elif command == "mkdir":
-            response = mkdir(args)
+            response = mkdir(client_pwd, args)
         elif command == "touch":
-            response = touch(args)
+            response = touch(client_pwd, args)
         elif command == "scp":
-            response = scp(args)
+            response = scp(client_pwd, args)
         elif command == "rm":
-            response = rm(args)
+            response = rm(client_pwd, args)
         elif command == "stat":
-            response = stat(args)
+            response = stat(client_pwd, args)
 
         conn.send(response)
 
