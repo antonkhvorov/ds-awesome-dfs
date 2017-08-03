@@ -46,7 +46,7 @@ def listen_for_clients_commands():
         elif command == "touch":
             response = touch(args)
         elif command == "cp":
-            response = cp(args)
+            response = cp(connected_storages, args)
         elif command == "rm":
             response = rm(args)
 
@@ -63,7 +63,7 @@ def send_heartbeat(connected_storages):
             sock.settimeout(10)
 
             data = sock.recv(1024)  # 1 KB
-            if not data:            # if we have not received answer from the Storage Server during heartbeat
+            if not data:  # if we have not received answer from the Storage Server during heartbeat
                 # PERFORM TRANSFER FUNCTION
 
                 pass
@@ -71,7 +71,7 @@ def send_heartbeat(connected_storages):
         sleep(60)
 
 
-#   def transfer_to_another_storage():
+# def transfer_to_another_storage():
 
 
 if __name__ == "__main__":
@@ -88,5 +88,3 @@ if __name__ == "__main__":
 
     heartBeatThread = Thread(target=send_heartbeat, args=(connected_storages,))
     heartBeatThread.start()
-
-
