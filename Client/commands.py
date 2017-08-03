@@ -39,7 +39,8 @@ def cp(temp_dir):
                 chunk_name = temp_dir + filepath + '/chunk ' + str(i) + '_' + os.path.basename(filepath)
                 send_file_to_storage(line.split('|')[0], chunk_name)
                 # send copy of file to storage
-                send_file_to_storage(line.split('|')[1], chunk_name)
+                if(line.split('|')[1] != os.linesep):
+                    send_file_to_storage(line.split('|')[1], chunk_name)
 
 def rm(response):
     # TODO: implement method

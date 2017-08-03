@@ -78,7 +78,6 @@ if __name__ == "__main__":
     my_ip = socket.gethostbyname(socket.gethostname())
     print "my ip is", my_ip
     sys.stdout.flush()
-
     connected_storages = list()
     t1 = Thread(target=listen_for_storage_connection, args=(connected_storages,))
     t1.start()
