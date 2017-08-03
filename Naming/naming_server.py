@@ -2,6 +2,8 @@ import socket
 import sys
 from time import sleep
 from threading import Thread
+
+from utils import recv_message, send_message
 from commands import *
 
 
@@ -22,10 +24,12 @@ def listen_for_storage_connection(connected_storages):
 def clients_commands(conn):
     client_pwd = "/"
     while True:
-        request = conn.recv(1024)  # 1 KB
+        request = recv_message(conn)  # 1 KB
 
         command = request.split()[0]
         args = request.split()[1:]
+
+        print command
 
         if command == "quit":
             conn.close()
@@ -47,7 +51,7 @@ def clients_commands(conn):
         elif command == "stat":
             response = stat(client_pwd, args)
 
-        conn.send(response)
+        send_message(conn,response)
 
 
 def listen_for_clients_connections():
@@ -56,7 +60,6 @@ def listen_for_clients_connections():
     sock.listen(1000)
     while True:
         conn, address = sock.accept()
-        connected_storages.append(address[0])
 
         print 'Client connected:', address
         sys.stdout.flush()
@@ -72,7 +75,7 @@ def send_heartbeat(connected_storages):
             sock.connect((s, 9003))
             sock.settimeout(10)
 
-            data = sock.recv(1024)  # 1 KB
+            data = recv_message(sock)  # 1 KB
             if not data:  # if we have not received answer from the Storage Server during heartbeat
                 # PERFORM TRANSFER FUNCTION
 

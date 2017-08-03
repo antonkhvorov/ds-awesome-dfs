@@ -3,6 +3,8 @@ from threading import Thread
 from time import sleep
 import sys
 
+from utils import send_message
+
 
 def connect_to_naming(naming_ip):
     sock = socket.socket()
@@ -21,7 +23,7 @@ def receive_heartbeat():
         conn, address = sock.accept()
         print 'Heartbeat from Naming Server received', address
         sys.stdout.flush()
-        conn.send("OK")
+        send_message(conn, "OK")
         conn.close()
 
 

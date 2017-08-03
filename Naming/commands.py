@@ -1,4 +1,4 @@
-from Naming.ip_pairs import generate_ip_pairs
+from ip_pairs import generate_ip_pairs
 
 
 def pwd(client_pwd):

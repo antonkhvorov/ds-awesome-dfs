@@ -1,8 +1,7 @@
-import shutil
 import socket
 import sys
-import tempfile
 
+from utils import recv_message, send_message
 from commands import *
 
 
@@ -18,8 +17,8 @@ def execute(sock, args):
         return
 
     no_args_commands = ["quit", "pwd", "ls"]
-
     commands_with_args = ["cd", "mkdir", "touch", "scp", "rm", "stat"]
+
     if command not in no_args_commands + commands_with_args:
         print "There is no command %s" % command
         help()
@@ -29,19 +28,12 @@ def execute(sock, args):
         print "Command %s should has arguments" % command
         help()
         return
-    # create temp directory
-    temp_dir = tempfile.mkdtemp()
 
-    message = ' '.join(args) # command and arguments
-    sock.send(message)
+    message = ' '.join(args)  # command and arguments
 
-    response = sock.recv(1024)  # 1 KB
+    send_message(sock, message)
 
-    if response != "200":
-        print response
-        # remove temp directory
-        shutil.rmtree(temp_dir)
-        return
+    response = recv_message(sock)
 
     if command == "pwd":
         pwd(response)
@@ -60,12 +52,8 @@ def execute(sock, args):
     elif command == "stat":
         stat(response)
 
-    # remove temp directory
-    shutil.rmtree(temp_dir)
-
 
 if __name__ == "__main__":
-    my_ip = socket.gethostbyname(socket.gethostname())
 
     naming_ip = sys.argv[1]
     sock = socket.socket()
