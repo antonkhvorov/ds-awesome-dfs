@@ -56,6 +56,26 @@ def listen_for_clients_commands():
 
         conn.close()
 
+
+def send_heartbeat(connected_storages):
+    while True:
+        for s in connected_storages:
+            sock = socket.socket()
+            sock.connect((s, 9003))
+            sock.settimeout(10)
+
+            data = sock.recv(1024)  # 1 KB
+            if not data:            # if we have not received answer from the Storage Server during heartbeat
+                # PERFORM TRANSFER FUNCTION
+
+                pass
+            sock.close()
+        sleep(60)
+
+
+#   def transfer_to_another_storage():
+
+
 if __name__ == "__main__":
     my_ip = socket.gethostbyname(socket.gethostname())
     print "my ip is", my_ip
@@ -67,5 +87,8 @@ if __name__ == "__main__":
 
     t2 = Thread(target=listen_for_clients_commands, args=())
     t2.start()
+
+    heartBeatThread = Thread(target=send_heartbeat, args=(connected_storages,))
+    heartBeatThread.start()
 
 
