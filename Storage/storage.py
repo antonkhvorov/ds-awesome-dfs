@@ -1,6 +1,4 @@
 import socket
-from threading import Thread
-from time import sleep
 import sys
 
 from utils import send_message

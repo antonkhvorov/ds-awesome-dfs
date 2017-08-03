@@ -24,12 +24,10 @@ def listen_for_storage_connection(connected_storages):
 def clients_commands(conn):
     client_pwd = "/"
     while True:
-        request = recv_message(conn)  # 1 KB
+        request = recv_message(conn)
 
         command = request.split()[0]
         args = request.split()[1:]
-
-        print command
 
         if command == "quit":
             conn.close()
@@ -51,7 +49,7 @@ def clients_commands(conn):
         elif command == "stat":
             response = stat(client_pwd, args)
 
-        send_message(conn,response)
+        send_message(conn, response)
 
 
 def listen_for_clients_connections():
@@ -75,7 +73,7 @@ def send_heartbeat(connected_storages):
             sock.connect((s, 9003))
             sock.settimeout(10)
 
-            data = recv_message(sock)  # 1 KB
+            data = recv_message(sock)
             if not data:  # if we have not received answer from the Storage Server during heartbeat
                 # PERFORM TRANSFER FUNCTION
 
