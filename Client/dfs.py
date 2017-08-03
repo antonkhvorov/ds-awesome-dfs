@@ -17,14 +17,14 @@ def execute(args):
 
     no_args_commands = ["pwd", "ls"]
 
-    if command not in no_args_commands:
-        print "Command %s should has arguments"
+    commands_with_args = ["cd", "mkdir", "touch", "scp", "rm", "stat"]
+    if command not in no_args_commands and command not in commands_with_args:
+        print "There is no command %s" % command
         help(args)
         return
 
-    commands_with_args = []
-    if command not in no_args_commands or command not in commands_with_args:
-        print "There is no command %s"
+    if command not in no_args_commands and len(args) < 4:
+        print "Command %s should has arguments" % command
         help(args)
         return
 
@@ -46,10 +46,12 @@ def execute(args):
         mkdir(response)
     elif command == "touch":
         touch(response)
-    elif command == "cp":
-        cp(response)
+    elif command == "scp":
+        scp(response)
     elif command == "rm":
         rm(response)
+    elif command == "stat":
+        stat(response)
 
     sock.close()
 

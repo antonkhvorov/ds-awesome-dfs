@@ -10,6 +10,7 @@ EXPOSE 9000
 # connection for Clients
 EXPOSE 9001
 
-ENV NAME Naming
+# connections for clients
+EXPOSE 9002
 
 CMD ["python", "naming_server.py"]

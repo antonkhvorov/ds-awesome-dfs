@@ -13,7 +13,7 @@ Instead of different machines you could use different consoles
 ```
 cd Naming
 docker build -t naming .
-docker run -p 9000:9000 -p 9001:9001 naming
+docker run naming
 ```
 Remember naming node ip.
 
@@ -21,7 +21,7 @@ Remember naming node ip.
 ```
 cd Storage
 docker build -t storage .
-docker run -e NAMING_IP=<naming node ip> -p 9002:9002 -p 9003:9003 storage
+docker run -e NAMING_IP=<naming node ip> storage
 ```
 
 #### On client machine:

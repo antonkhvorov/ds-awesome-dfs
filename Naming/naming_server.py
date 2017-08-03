@@ -45,10 +45,12 @@ def listen_for_clients_commands():
             response = mkdir(args)
         elif command == "touch":
             response = touch(args)
-        elif command == "cp":
-            response = cp(args)
+        elif command == "scp":
+            response = scp(args)
         elif command == "rm":
             response = rm(args)
+        elif command == "stat":
+            response = stat(args)
 
         conn.send(response)
 

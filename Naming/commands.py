@@ -1,33 +1,38 @@
 def pwd():
     # TODO: implement method
-    pass
+    return ''
 
 
 def ls():
     # TODO: implement method
-    pass
+    return ''
 
 
 def cd(args):
     # TODO: implement method
-    pass
+    return ' '.join(args)
 
 
 def mkdir(args):
     # TODO: implement method
-    pass
+    return ' '.join(args)
 
 
 def touch(args):
     # TODO: implement method
-    pass
+    return ' '.join(args)
 
 
-def cp(args):
+def scp(args):
     # TODO: implement method
-    pass
+    return ' '.join(args)
 
 
 def rm(args):
     # TODO: implement method
-    pass
+    return ' '.join(args)
+
+
+def stat(args):
+    # TODO: implement method
+    return ' '.join(args)

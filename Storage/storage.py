@@ -10,8 +10,8 @@ def connect_to_naming(naming_ip):
 
     print "connected to", naming_ip
     sys.stdout.flush()
-
-    sleep(30)
+    while True:
+        pass
 
 
 if __name__ == "__main__":
@@ -21,3 +21,5 @@ if __name__ == "__main__":
 
     naming_ip = sys.argv[1]
     connect_to_naming(naming_ip)
+    # TODO:
+    # wait_for_heartbeat()
