@@ -6,18 +6,14 @@ def pwd(response):
 
 
 def ls(response):
-    # TODO: implement method
-
     print response
 
 
 def cd(response):
-    # TODO: implement method
-    print response
+    return response
 
 
 def mkdir(response):
-    # TODO: implement method
     print response
 
 

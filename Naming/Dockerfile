@@ -13,4 +13,5 @@ EXPOSE 9001
 # connections for clients
 EXPOSE 9002
 
+
 CMD ["python", "naming_server.py"]

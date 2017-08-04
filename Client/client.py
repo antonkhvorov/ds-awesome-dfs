@@ -4,11 +4,18 @@ import sys
 from utils import recv_message, send_message
 from commands import *
 
+client_pwd = "/"
+
 
 def execute(sock, args):
+    if len(args) == 0:
+        return
+
     command = args[0]
+    global client_pwd
 
     if command == "quit":
+        send_message(sock, ' '.join(args))
         sock.close()
         exit(0)
 
@@ -29,7 +36,7 @@ def execute(sock, args):
         help()
         return
 
-    message = ' '.join(args)  # command and arguments
+    message = client_pwd + ' ' + ' '.join(args)  # command and arguments
 
     send_message(sock, message)
 
@@ -40,7 +47,7 @@ def execute(sock, args):
     elif command == "ls":
         ls(response)
     elif command == "cd":
-        cd(response)
+        client_pwd = cd(response)
     elif command == "mkdir":
         mkdir(response)
     elif command == "touch":

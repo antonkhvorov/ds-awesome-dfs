@@ -1,3 +1,7 @@
+import os
+
+from naming_server import fake_root
+from utils import format_path
 from ip_pairs import generate_ip_pairs
 
 
@@ -6,26 +10,46 @@ def pwd(client_pwd):
 
 
 def ls(client_pwd):
-    # TODO: implement method
-    pass
+    real_path = os.path.normpath(fake_root + client_pwd)
+    try:
+        listdir = os.listdir(real_path)
+    except Exception as e:
+        return "Error incorrect path!"
+    return os.linesep.join(str(name) for name in listdir)
 
 
 def cd(client_pwd, args):
-    # TODO: implement method
-    return ' '.join(args)
+    if len(args) != 1:
+        return "Error not enough arguments! Use: cd <argument>"
+
+    path = os.path.normpath(format_path(client_pwd) + args[0])
+    real_path = os.path.normpath(fake_root + path)
+
+    if os.path.exists(real_path):
+        os.chdir(real_path)
+        return path
+    else:
+        return client_pwd
 
 
 def mkdir(client_pwd, args):
-    # TODO: implement method
-    return ' '.join(args)
+    if len(args) != 1:
+        return "Error not enough arguments! Use: mkdir <argument>"
+
+    path = os.path.normpath(format_path(client_pwd) + args[0])
+    real_path = os.path.normpath(fake_root + path)
+
+    if not os.path.exists(real_path):
+        try:
+            os.makedirs(real_path)
+            return ""
+        except:
+            return "Unable to create directory!"
+    else:
+        return "Directory " + format_path(args[0]) + " already exists!"
 
 
 def touch(client_pwd, args):
-    # TODO: implement method
-    return ' '.join(args)
-
-
-def scp(client_pwd, args):
     # TODO: implement method
     return ' '.join(args)
 

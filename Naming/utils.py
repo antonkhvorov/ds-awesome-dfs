@@ -21,3 +21,7 @@ def recvall(sock, count):
         buf += newbuf
         count -= len(newbuf)
     return buf
+
+
+def format_path(path):
+    return path if str(path).endswith('/') else str(path) + "/"

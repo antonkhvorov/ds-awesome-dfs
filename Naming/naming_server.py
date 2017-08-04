@@ -6,6 +6,8 @@ from threading import Thread
 from utils import recv_message, send_message
 from commands import *
 
+fake_root = "/fake_root"
+
 
 def listen_for_storage_connection(connected_storages):
     sock = socket.socket()
@@ -22,12 +24,12 @@ def listen_for_storage_connection(connected_storages):
 
 
 def clients_commands(conn):
-    client_pwd = "/"
     while True:
         request = recv_message(conn)
-
-        command = request.split()[0]
-        args = request.split()[1:]
+        print request
+        client_pwd = request.split()[0]
+        command = request.split()[1]
+        args = request.split()[2:]
 
         if command == "quit":
             conn.close()
@@ -84,10 +86,22 @@ def send_heartbeat(connected_storages):
 
 # def transfer_to_another_storage():
 
+def init_fake_root():
+    if not os.path.exists(fake_root):
+        try:
+            os.makedirs(fake_root)
+            return ""
+        except OSError as e:
+            return "Error " + e.message
+
 
 if __name__ == "__main__":
+    init_fake_root()
     my_ip = socket.gethostbyname(socket.gethostname())
     print "my ip is", my_ip
+
+    print os.path.normpath("//hi")
+
     sys.stdout.flush()
     connected_storages = list()
     t1 = Thread(target=listen_for_storage_connection, args=(connected_storages,))
