@@ -37,7 +37,7 @@ def clients_commands(conn):
         elif command == "pwd":
             response = pwd(client_pwd)
         elif command == "ls":
-            response = ls(client_pwd)
+            response = ls(client_pwd, args)
         elif command == "cd":
             response = cd(client_pwd, args)
         elif command == "mkdir":
@@ -99,8 +99,6 @@ if __name__ == "__main__":
     init_fake_root()
     my_ip = socket.gethostbyname(socket.gethostname())
     print "my ip is", my_ip
-
-    print os.path.normpath("//hi")
 
     sys.stdout.flush()
     connected_storages = list()

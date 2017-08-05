@@ -36,6 +36,10 @@ def execute(sock, args):
         help()
         return
 
+    if command == "ls": # need for supporting ls [<path>]
+        if len(args) == 1:
+            args.append(" .")
+
     message = client_pwd + ' ' + ' '.join(args)  # command and arguments
 
     send_message(sock, message)

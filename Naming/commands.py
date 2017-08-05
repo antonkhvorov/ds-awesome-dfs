@@ -9,8 +9,13 @@ def pwd(client_pwd):
     return client_pwd
 
 
-def ls(client_pwd):
-    real_path = os.path.normpath(fake_root + client_pwd)
+def ls(client_pwd, args):
+    if len(args) != 1:
+        return "Error not enough arguments! Use: ls [<arguments>]"
+
+    path = os.path.normpath(format_path(client_pwd) + args[0])
+    real_path = os.path.normpath(fake_root + path)
+
     try:
         listdir = os.listdir(real_path)
     except Exception as e:
