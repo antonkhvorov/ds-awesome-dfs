@@ -1,7 +1,11 @@
 import socket
 import sys
 
+import os
+
 from utils import send_message
+
+fake_root = "/fake_root"
 
 
 def connect_to_naming(naming_ip):
@@ -25,7 +29,17 @@ def receive_heartbeat():
         conn.close()
 
 
+def init_fake_root():
+    if not os.path.exists(fake_root):
+        try:
+            os.makedirs(fake_root)
+            return ""
+        except OSError as e:
+            return "Error " + e.message
+
+
 if __name__ == "__main__":
+    init_fake_root()
     my_ip = socket.gethostbyname(socket.gethostname())
     print "my ip is", my_ip
     sys.stdout.flush()
