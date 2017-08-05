@@ -2,6 +2,7 @@ import socket
 import sys
 
 import os
+from threading import Thread
 
 from utils import send_message
 
@@ -16,6 +17,22 @@ def connect_to_naming(naming_ip):
     print "connected to", naming_ip
     sys.stdout.flush()
 
+
+def listen_for_clients_connections():
+    sock = socket.socket()
+    sock.bind(('', 9001))
+    sock.listen(1000)
+    while True:
+        conn, address = sock.accept()
+
+        print 'Client connected:', address
+        sys.stdout.flush()
+
+        t = Thread(target=clients_commands, args=(conn,))
+        t.start()
+
+def clients_commands(conn):
+    pass
 
 def receive_heartbeat():
     sock = socket.socket()

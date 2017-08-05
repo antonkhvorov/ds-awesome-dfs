@@ -1,4 +1,7 @@
 import os
+import socket
+
+from utils import send_message
 
 
 def pwd(response):
@@ -55,8 +58,12 @@ def help():
 
 
 def send_file_to_storage(storage_ip, chunk):
-    # TODO: implement method
-    print storage_ip
+    sock = socket.socket()
+    sock.connect((storage_ip, 9001))
+
+    print "connected to", storage_ip
+    send_message(sock, chunk)
+
     with open(chunk, "rb") as in_file:
         for line in in_file:
             print line
