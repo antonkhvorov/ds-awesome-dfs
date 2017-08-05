@@ -10,10 +10,10 @@ def generate_ip_pairs(file_name, file_size, chunks, ips):
         output_str += get_ip_pair(ips) if (i == int(chunks) - 1) else get_ip_pair(ips) + os.linesep
         i += 1
 
-    print output_str
     text_file = open(file_name, "w")
     text_file.write(output_str)
     text_file.close()
+    return output_str
 
 
 def get_ip_pair(ips):

@@ -59,16 +59,18 @@ def touch(client_pwd, args):
     return ' '.join(args)
 
 
-# args[0] - filename
-# args[1] - file size
-# args[2] - count of chunks
+# args[2] - filename
+# args[3] - file size
+# args[4] - count of chunks
 def cp(client_pwd, connected_storages, args):
-    if len(args) != 3:
-        # TODO Handle exception
-        return "400"
-    generate_ip_pairs(args[0], args[1], args[2], connected_storages)
-    # TODO change return status
-    return "200"
+    if len(args) != 5:
+        return "Wrong arguments. Use cp <SOURCE> <DEST>"
+
+    file_name = args[2]
+    file_size = args[3]
+    chunks = args[4]
+
+    return generate_ip_pairs(file_name, file_size, chunks, connected_storages)
 
 
 def rm(client_pwd, args):
