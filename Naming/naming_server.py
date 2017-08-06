@@ -16,7 +16,7 @@ def listen_for_storage_connection(connected_storages):
     while True:
         conn, address = sock.accept()
         if address[0] not in connected_storages:
-            connected_storages.append(address[0])
+            connected_storages.add(address[0])
 
         print 'Storage connected:', address
         sys.stdout.flush()
@@ -47,7 +47,7 @@ def clients_commands(conn):
         elif command == "mkdir":
             response = mkdir(client_pwd, args)
         elif command == "cp":
-            response = cp(client_pwd, connected_storages, args)
+            response = cp(client_pwd, list(connected_storages), args)
         elif command == "rm":
             response = rm(client_pwd, args)
         elif command == "stat":
@@ -72,20 +72,33 @@ def listen_for_clients_connections():
         t.start()
 
 
+def duplicate_lost_data(lost_storage):
+    # TODO: implement actions
+    print 'Lost connection with', lost_storage
+    sys.stdout.flush()
+
+    files = os.popen('find %s -name "*"' % fake_root).read().split()
+
+    print 'Files:', files
+    sys.stdout.flush()
+
+
 def send_heartbeat(connected_storages):
     while True:
+        lost = []
         for s in connected_storages:
             sock = socket.socket()
             sock.connect((s, 9003))
             sock.settimeout(10)
-
-            data = recv_message(sock)
-            if not data:  # if we have not received answer from the Storage Server during heartbeat
-                # PERFORM TRANSFER FUNCTION
-
-                pass
+            try:
+                data = recv_message(sock)
+            except:
+                duplicate_lost_data(s)
+                lost.append(s)
             sock.close()
-        sleep(60)
+        for s in lost:
+            connected_storages.remove(s)
+        sleep(5)
 
 
 # def transfer_to_another_storage():
@@ -105,7 +118,7 @@ if __name__ == "__main__":
     print "my ip is", my_ip
 
     sys.stdout.flush()
-    connected_storages = list()
+    connected_storages = set()
     t1 = Thread(target=listen_for_storage_connection, args=(connected_storages,))
     t1.start()
 
