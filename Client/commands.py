@@ -54,8 +54,18 @@ def rm(response):
 
 
 def help():
-    print "Use <command> [<arguments>]"
-    # TODO: describe all commands
+    print "Available commands:"
+    print "quit"
+    print "help"
+    print "pwd"
+    print "ls [directory]"
+    print "mkdir <directory>"
+    print "cd <directory>"
+    print "cp <file> <location>"
+    print "cat <file>"
+    print "rm [-r] <file or directory> "
+    print "stat <file or directory>"
+    print "init"
 
 
 def send_file_to_storage(storage_ip, chunk_data):
