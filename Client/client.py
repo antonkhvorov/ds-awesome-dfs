@@ -1,8 +1,10 @@
 import shutil
+import socket
 import sys
 import tempfile
 
 from chunks_creator import create_chunks
+from utils import recv_message, send_message
 from commands import *
 from logger import get_logger
 client_pwd = "/"
@@ -22,23 +24,31 @@ def execute(sock, args):
         logger.info('Client pwd: %s ; Process finished with exit code 0' % client_pwd)
         exit(0)
 
-
     if command == "help":
         help()
         return
 
-    no_args_commands = ["quit", "pwd", "ls"]
-    commands_with_args = ["cd", "mkdir", "touch", "cp", "rm", "stat"]
+    number_of_arguments = {"pwd": [1],
+                            "ls": [1, 2],
+                            "mkdir": [2],
+                            "cd": [2],
+                            "cp": [3],
+                            "cat": [2],
+                            "rm": [2, 3],
+                            "stat": [2],
+                            "init": [1]
+                            }
 
-    if command not in no_args_commands + commands_with_args:
+
+    if command not in number_of_arguments:
         print "There is no command %s" % command
         logger.info('Client pwd: %s ; There is no command %s' % (client_pwd, command))
         help()
         return
 
-    if command in commands_with_args and len(args) < 2:
-        print "Command %s should has arguments" % command
-        logger.info('Client pwd: %s ; Command %s should has arguments' % (client_pwd, command))
+    if len(args) not in number_of_arguments[command]:
+        print "Wrong number of arguments for %s" % command
+        logger.info('Wrong number of arguments for %s' % command)
         help()
         return
 
@@ -70,8 +80,6 @@ def execute(sock, args):
         client_pwd = cd(response)
     elif command == "mkdir":
         mkdir(response)
-    elif command == "touch":
-        touch(response)
     elif command == "cp":
         cp(response, temp_dir)
         # remove temp directory
@@ -80,15 +88,19 @@ def execute(sock, args):
         rm(response)
     elif command == "stat":
         stat(response)
+    elif command == "init":
+        init(response)
 
 
 if __name__ == "__main__":
+
     naming_ip = sys.argv[1]
     sock = socket.socket()
     sock.connect((naming_ip, 9001))
     logger.info('Connected to the Naming server: %s' % naming_ip)
 
     while True:
+        sys.stdout.write('dfs>>>')
         args = raw_input()
         logger.info('Client pwd: %s ; Input string: %s' % (client_pwd, args))
         execute(sock, args.split())

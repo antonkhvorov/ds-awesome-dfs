@@ -26,12 +26,6 @@ def mkdir(response):
     print response
 
 
-def touch(response):
-    # TODO: implement method
-    logger.info('Command touch response: %s' % response)
-    print response
-
-
 def cp(response, temp_dir):
     original_file = response
     for i, line in enumerate(original_file.splitlines()):
@@ -62,11 +56,26 @@ def rm(response):
     print response
 
 
-def help():
-    response = "Use <command> [<arguments>]"
-    logger.info('Command help response: %s' % response)
+def touch(response):
+    # TODO: implement method
+    logger.info('Command touch response: %s' % response)
     print response
-    # TODO: describe all commands
+
+
+def help():
+    print "Available commands:"
+    print "quit"
+    print "help"
+    print "pwd"
+    print "ls [directory]"
+    print "mkdir <directory>"
+    print "cd <directory>"
+    print "cp <file> <location>"
+    print "cat <file>"
+    print "rm [-r] <file or directory> "
+    print "stat <file or directory>"
+    print "init"
+    logger.info('Command help response: comands were printed')
 
 
 def send_file_to_storage(storage_ip, chunk_data):
