@@ -27,9 +27,11 @@ def clients_commands(conn):
     while True:
         request = recv_message(conn)
         print request
-        client_pwd = request.split()[0]
-        command = request.split()[1]
-        args = request.split()[2:]
+        req = request.split()
+        client_pwd = req[0]
+        command = req[1]
+        args = req[2:]
+        response = "nothing"
 
         if command == "quit":
             conn.close()
@@ -44,7 +46,7 @@ def clients_commands(conn):
             response = mkdir(client_pwd, args)
         elif command == "touch":
             response = touch(client_pwd, args)
-        elif command == "cp":
+        elif command == "scp":
             response = cp(client_pwd, connected_storages, args)
         elif command == "rm":
             response = rm(client_pwd, args)

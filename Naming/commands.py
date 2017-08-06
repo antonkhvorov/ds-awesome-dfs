@@ -15,11 +15,10 @@ def ls(client_pwd, args):
 
     path = os.path.normpath(format_path(client_pwd) + args[0])
     real_path = os.path.normpath(fake_root + path)
-
     try:
         listdir = os.listdir(real_path)
     except Exception as e:
-        return "Error incorrect path!"
+        return "Error incorrect path!!"
     return os.linesep.join(str(name) for name in listdir)
 
 
@@ -59,18 +58,25 @@ def touch(client_pwd, args):
     return ' '.join(args)
 
 
-# args[2] - filename
-# args[3] - file size
-# args[4] - count of chunks
+# args[0] - remote_path
+# args[1] - filename
+# args[2] - file size
+# args[3] - count of chunks
 def cp(client_pwd, connected_storages, args):
-    if len(args) != 5:
+    if len(args) != 4:
         return "Wrong arguments. Use cp <SOURCE> <DEST>"
+    remote_path = args[0]
+    file_name = args[1]
+    file_size = args[2]
+    chunks = args[3]
 
-    file_name = args[2]
-    file_size = args[3]
-    chunks = args[4]
+    if remote_path == '.':
+        remote_address = format_path(client_pwd) + file_name
+    else:
+        remote_address = (format_path(remote_path) if remote_path.startswith('/') else "/" + format_path(remote_path)) \
+                         + file_name
 
-    return generate_ip_pairs(file_name, file_size, chunks, connected_storages)
+    return generate_ip_pairs(remote_address, file_size, chunks, connected_storages)
 
 
 def rm(client_pwd, args):
