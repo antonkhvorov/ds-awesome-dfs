@@ -27,6 +27,7 @@ def clients_commands(conn):
     while True:
         request = recv_message(conn)
         print request
+        sys.stdout.flush()
         req = request.split()
         client_pwd = req[0]
         command = req[1]
