@@ -1,6 +1,9 @@
+import shutil
 import socket
 import sys
+import tempfile
 
+from chunks_creator import create_chunks
 from utils import recv_message, send_message
 from commands import *
 
@@ -36,9 +39,18 @@ def execute(sock, args):
         help()
         return
 
-    if command == "ls": # need for supporting ls [<path>]
+    if command == "ls":  # need for supporting ls [<path>]
         if len(args) == 1:
             args.append(" .")
+
+    if command == "scp":  # generate special message and create chunks for cp command
+        # create temp directory
+        temp_dir = tempfile.mkdtemp()
+        filename = os.path.basename(args[1])  # get name of file
+        remote_path = args[2]
+        size = os.stat(args[1]).st_size  # get file size
+        chunks = create_chunks(os.path.abspath(args[1]), temp_dir)
+        args = [command, remote_path, filename, str(size), str(chunks)]
 
     message = client_pwd + ' ' + ' '.join(args)  # command and arguments
 
@@ -56,8 +68,11 @@ def execute(sock, args):
         mkdir(response)
     elif command == "touch":
         touch(response)
-    elif command == "cp":
-        cp(response)
+    elif command == "scp":
+        cp(response, temp_dir)
+        print 'File was copied to the server'
+        # remove temp directory
+        shutil.rmtree(temp_dir)
     elif command == "rm":
         rm(response)
     elif command == "stat":

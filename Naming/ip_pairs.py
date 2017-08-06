@@ -1,16 +1,17 @@
 import os
 import random
+from naming_server import fake_root
 
 
-def generate_ip_pairs(file_name, file_size, chunks, ips):
-    output_str = os.path.abspath(file_name) + "|" + file_size + "|" + chunks + os.linesep
+def generate_ip_pairs(remote_file, file_size, chunks, ips):
+    output_str = remote_file + "|" + file_size + "|" + chunks + os.linesep
 
     i = 0
     while i < int(chunks):
         output_str += get_ip_pair(ips) if (i == int(chunks) - 1) else get_ip_pair(ips) + os.linesep
         i += 1
 
-    text_file = open(file_name, "w")
+    text_file = open(os.path.normpath(fake_root + remote_file), "w")
     text_file.write(output_str)
     text_file.close()
     return output_str
