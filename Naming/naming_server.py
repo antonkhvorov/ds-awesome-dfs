@@ -5,6 +5,7 @@ from time import sleep
 
 from commands import *
 from utils import recv_message, send_message
+from moving import *
 
 fake_root = "/fake_root"
 
@@ -72,7 +73,7 @@ def listen_for_clients_connections():
         t.start()
 
 
-def duplicate_lost_data(lost_storage):
+def duplicate_lost_data(lost_storage, connected_storages):
     # TODO: implement actions
     print 'Lost connection with', lost_storage
     sys.stdout.flush()
@@ -82,18 +83,33 @@ def duplicate_lost_data(lost_storage):
     print 'Files:', files
     sys.stdout.flush()
 
+    for filename in files:
+        with open(filename, "r") as f:
+            for i, line in enumerate(f.splitlines()):
+                if i != 0:
+                    chunk_ips = line.split('|')
+                    second_ip = None
+                    if lost_storage == chunk_ips[0]:
+                        second_ip = chunk_ips[1]
+                    if lost_storage == chunk_ips[1]:
+                        second_ip = chunk_ips[0]
+                    if second_ip:
+                        chunk_name = filename + '/chunk_' + str(i) + '.txt'
+                        new_chunk_ip = generate_new_ip(lost_storage, second_ip, connected_storages)
+                        move_chunk(chunk_name, second_ip, new_chunk_ip)
+
 
 def send_heartbeat(connected_storages):
     while True:
         lost = []
         for s in connected_storages:
-            sock = socket.socket()
-            sock.connect((s, 9003))
-            sock.settimeout(10)
             try:
+                sock = socket.socket()
+                sock.connect((s, 9003))
+                sock.settimeout(10)
                 data = recv_message(sock)
             except:
-                duplicate_lost_data(s)
+                duplicate_lost_data(s, connected_storages)
                 lost.append(s)
             sock.close()
         for s in lost:
