@@ -1,4 +1,5 @@
 import sys
+import socket
 from threading import Thread
 from time import sleep
 
@@ -14,7 +15,8 @@ def listen_for_storage_connection(connected_storages):
     sock.listen(1000)
     while True:
         conn, address = sock.accept()
-        connected_storages.append(address[0])
+        if address[0] not in connected_storages:
+            connected_storages.append(address[0])
 
         print 'Storage connected:', address
         sys.stdout.flush()
@@ -44,14 +46,14 @@ def clients_commands(conn):
             response = cd(client_pwd, args)
         elif command == "mkdir":
             response = mkdir(client_pwd, args)
-        elif command == "touch":
-            response = touch(client_pwd, args)
         elif command == "cp":
             response = cp(client_pwd, connected_storages, args)
         elif command == "rm":
             response = rm(client_pwd, args)
         elif command == "stat":
             response = stat(client_pwd, args)
+        elif command == "init":
+            response = init(client_pwd, args)
 
         send_message(conn, response)
 

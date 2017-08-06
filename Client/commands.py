@@ -1,6 +1,7 @@
 import os
 import socket
 
+
 from logger import get_logger
 from utils import send_message, recv_message, format_path
 
@@ -72,7 +73,7 @@ def help():
     print "cd <directory>"
     print "cp <file> <location>"
     print "cat <file>"
-    print "rm [-r] <file or directory> "
+    print "rm <file or directory> "
     print "stat <file or directory>"
     print "init"
     logger.info('Command help response: comands were printed')
