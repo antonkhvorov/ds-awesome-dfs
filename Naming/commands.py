@@ -1,7 +1,8 @@
 import os
+import socket
 
 from naming_server import fake_root
-from utils import format_path
+from utils import format_path, send_message, recv_message
 from ip_pairs import generate_ip_pairs
 
 
@@ -109,3 +110,52 @@ def stat(client_pwd, args):
                     return "File size: " + file_data[1] + os.linesep + "Divided on: " + file_data[2] + " chunks"
             except:
                 return "Unable to get file stats!"
+
+
+def cat(client_pwd, connected_storages, args):
+    if len(args) != 1:
+        return "Error not enough arguments! Use: stat <argument>"
+    # file in the pwd directory
+    filepath = os.path.normpath(format_path(client_pwd) + args[0])
+    real_path = os.path.normpath(fake_root + filepath)
+    if not os.path.exists(real_path):
+        return "Error path %s not exists!" % filepath
+    else:
+        with open(real_path, 'r') as read_file:
+            full_file = ''
+            lcount = 0
+            for i, line in enumerate(read_file):
+                print '%s %s' %(i, line)
+                if i == 0:
+                    remote_path = line.split('|')[0]
+                    chunks = line.split('|')[2]
+                    print "chunks = ", chunks
+                if i > 0:
+                    chunk_path = format_path(remote_path) + 'chunk_' + str(i) + '.txt'
+                    if ip_in_list(line.split('|')[0], connected_storages):
+                        full_file += request_chunk_from_storage(line.split('|')[0], chunk_path)
+                    elif ip_in_list(line.split('|')[1], connected_storages):
+                        full_file += request_chunk_from_storage(line.split('|')[1], chunk_path)
+                    else:
+                        return "Some chunk of %s file is not exist" % filepath
+                    lcount += 1
+                    print lcount
+
+        if lcount != int(chunks):
+            return "Some chunk of %s file is not exist" % filepath
+        else:
+            return full_file
+
+
+
+def ip_in_list(ip, connected_storages):
+    return True if ip in connected_storages else False
+
+
+def request_chunk_from_storage(storage_ip, chunk_path):
+    sock = socket.socket()
+    sock.connect((storage_ip, 9005))
+    send_message(sock, chunk_path)
+    response = recv_message(sock)
+    sock.close()
+    return response

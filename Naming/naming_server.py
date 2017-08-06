@@ -1,3 +1,4 @@
+import socket
 import sys
 from threading import Thread
 from time import sleep
@@ -52,6 +53,8 @@ def clients_commands(conn):
             response = rm(client_pwd, args)
         elif command == "stat":
             response = stat(client_pwd, args)
+        elif command == "cat":
+            response = cat(client_pwd, connected_storages, args)
 
         send_message(conn, response)
 

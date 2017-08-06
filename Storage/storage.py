@@ -33,6 +33,20 @@ def listen_for_clients_connections():
         t.start()
 
 
+def listen_for_naming_connections():
+    sock = socket.socket()
+    sock.bind(('', 9005))
+    sock.listen(1000)
+    while True:
+        conn, address = sock.accept()
+
+        print 'Naming connected:', address
+        sys.stdout.flush()
+
+        t = Thread(target=naming_commands, args=(conn,))
+        t.start()
+
+
 def clients_commands(conn):
     request = recv_message(conn)
     file = request.splitlines()[0]
@@ -41,11 +55,19 @@ def clients_commands(conn):
     mkdir(filepath)
     with open(chunk_name, "wb") as out_file:
         for line in request.splitlines()[1:]:
-            out_file.write(line)
+            out_file.write(line + os.linesep)
     print 'Added ', chunk_name
     response = 'OK'
     send_message(conn, response)
 
+def naming_commands(conn):
+    request = recv_message(conn)
+    filepath = request
+    chunk_name = os.path.normpath(fake_root + filepath)
+    chunk_data = ''
+    with open(chunk_name, 'r') as chunk:
+        chunk_data += chunk.read()
+    send_message(conn, chunk_data)
 
 def receive_heartbeat():
     sock = socket.socket()
@@ -80,6 +102,7 @@ if __name__ == "__main__":
     t2 = Thread(target=listen_for_clients_connections, args=())
     t2.start()
 
+    t3 = Thread(target=listen_for_naming_connections, args=())
+    t3.start()
+
     receive_heartbeat()
-
-

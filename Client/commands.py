@@ -37,7 +37,9 @@ def cp(response, temp_dir):
             chunk_name = format_path(temp_dir) + os.path.basename(filepath) + '/chunk_' + str(i) + '.txt'
             chunk_data = format_path(filepath) + 'chunk_' + str(i) + '.txt' + os.linesep
             with open(chunk_name, 'r') as chunk:
-                chunk_data += chunk.read()
+                chunk_data += chunk.read() + os.linesep
+            print chunk_name
+            print chunk_data
             send_file_to_storage(line.split('|')[0], chunk_data)
             # send copy of file to storage
             if (line.split('|')[1] != ''):
@@ -60,6 +62,13 @@ def init(response):
     # TODO: implement method
     logger.info('Command init response: %s' % response)
     print response
+
+def cat(response):
+    for line in response.splitlines():
+        print(line)
+    logger.info('Command cat response was printed')
+
+
 
 
 def help():

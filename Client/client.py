@@ -89,6 +89,8 @@ def execute(sock, args):
         stat(response)
     elif command == "init":
         init(response)
+    elif command == "cat":
+        cat(response)
 
 
 if __name__ == "__main__":
