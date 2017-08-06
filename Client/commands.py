@@ -1,27 +1,34 @@
 import os
 import socket
 
+from logger import get_logger
 from utils import send_message, recv_message, format_path
 
+logger = get_logger('client_commands')
 
 def pwd(response):
+    logger.info('Command pwd response: %s' % response)
     print response
 
 
 def ls(response):
+    logger.info('Command ls response: %s' % response)
     print response
 
 
 def cd(response):
+    logger.info('Command cd response: %s' % response)
     return response
 
 
 def mkdir(response):
+    logger.info('Command mkdir response: %s' % response)
     print response
 
 
 def touch(response):
     # TODO: implement method
+    logger.info('Command touch response: %s' % response)
     print response
 
 
@@ -45,16 +52,20 @@ def cp(response, temp_dir):
 
 def stat(response):
     # TODO: implement method
+    logger.info('Command stat response: %s' % response)
     print response
 
 
 def rm(response):
     # TODO: implement method
+    logger.info('Command rm response: %s' % response)
     print response
 
 
 def help():
-    print "Use <command> [<arguments>]"
+    response = "Use <command> [<arguments>]"
+    logger.info('Command help response: %s' % response)
+    print response
     # TODO: describe all commands
 
 
@@ -62,6 +73,9 @@ def send_file_to_storage(storage_ip, chunk_data):
     sock = socket.socket()
     sock.connect((storage_ip, 9004))
     send_message(sock, chunk_data)
-    request = recv_message(sock)
+    logger.info('Command cp response: Sent %s to the storage %s' % (os.path.basename(chunk_data.splitlines()[0]), storage_ip))
+    response = recv_message(sock)
+    logger.info(
+        'Command cp response: Storage %s response: %s' % (storage_ip, response))
     sock.close()
 

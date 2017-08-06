@@ -1,10 +1,9 @@
-import socket
 import sys
-from time import sleep
 from threading import Thread
+from time import sleep
 
-from utils import recv_message, send_message
 from commands import *
+from utils import recv_message, send_message
 
 fake_root = "/fake_root"
 
