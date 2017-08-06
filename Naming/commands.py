@@ -1,5 +1,7 @@
 import os
 import socket
+import shutil
+
 
 from naming_server import fake_root
 from utils import format_path, send_message, recv_message
@@ -54,11 +56,6 @@ def mkdir(client_pwd, args):
         return "Directory " + format_path(args[0]) + " already exists!"
 
 
-def touch(client_pwd, args):
-    # TODO: implement method
-    return ' '.join(args)
-
-
 # args[0] - remote_path
 # args[1] - filename
 # args[2] - file size
@@ -81,8 +78,28 @@ def cp(client_pwd, connected_storages, args):
 
 
 def rm(client_pwd, args):
-    # TODO: implement method
-    return ' '.join(args)
+    if len(args) != 1:
+        return "Wrong number of arguments for rm"
+
+    path = os.path.normpath(format_path(client_pwd) + args[0])
+    real_path = os.path.normpath(fake_root + path)
+
+    if not os.path.exists(real_path):
+        return "Error path " + path + "not exists!"
+    else:
+        if os.path.isdir(real_path):
+            try:
+                shutil.rmtree(real_path)
+                return ""
+            except Exception as e:
+                return "Unable remove directory"
+
+        if os.path.isfile(real_path):
+            try:
+                os.remove(real_path)
+                return ""
+            except:
+                return "Unable to remove file"
 
 
 def stat(client_pwd, args):
@@ -159,3 +176,8 @@ def request_chunk_from_storage(storage_ip, chunk_path):
     response = recv_message(sock)
     sock.close()
     return response
+
+
+def init(client_pwd, args):
+    # TODO: implement method
+    return ' '.join(args)

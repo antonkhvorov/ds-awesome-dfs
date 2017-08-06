@@ -1,6 +1,6 @@
 import os
 
-from Client.chunks_creator import create_chunks
+from chunks_creator import create_chunks
 
 
 def generate_message(command, temp_dir, args):

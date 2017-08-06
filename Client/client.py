@@ -1,6 +1,6 @@
-import shutil
 import sys
 import tempfile
+import shutil
 
 from chunks_creator import create_chunks
 from commands import *
@@ -28,16 +28,21 @@ def execute(sock, args):
         help()
         return
 
-    number_of_arguments = {"pwd": [1],
-                           "ls": [1, 2],
-                           "mkdir": [2],
-                           "cd": [2],
-                           "cp": [3],
-                           "cat": [2],
-                           "rm": [2, 3],
-                           "stat": [2],
-                           "init": [1]
-                           }
+    if command == "ls":  # need for supporting ls [<path>]
+        if len(args) == 1:
+            args.append(" .")
+
+    number_of_arguments = {"pwd": 1,
+                            "ls": 2,
+                            "mkdir": 2,
+                            "cd": 2,
+                            "cp": 3,
+                            "cat": 2,
+                            "rm": 2,
+                            "stat": 2,
+                            "init": 1
+                            }
+
 
     if command not in number_of_arguments:
         print "There is no command %s" % command
@@ -45,15 +50,11 @@ def execute(sock, args):
         help()
         return
 
-    if len(args) not in number_of_arguments[command]:
-        print "Wrong number of arguments for %s" % command
+    if len(args) != number_of_arguments[command]:
+        print "Wrong number of arguments for %s. Should be %d arguments" % (command, number_of_arguments[command])
         logger.info('Wrong number of arguments for %s' % command)
         help()
         return
-
-    if command == "ls":  # need for supporting ls [<path>]
-        if len(args) == 1:
-            args.append(" .")
 
     if command == "cp":  # generate special message and create chunks for cp command
         # create temp directory
