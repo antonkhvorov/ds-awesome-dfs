@@ -43,12 +43,7 @@ def stat(response):
     print response
 
 
-def rm_file(response):
-    # TODO: implement method
-    print response
-
-
-def rm_dir(response):
+def rm(response):
     # TODO: implement method
     print response
 

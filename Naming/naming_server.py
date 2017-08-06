@@ -15,7 +15,8 @@ def listen_for_storage_connection(connected_storages):
     sock.listen(1000)
     while True:
         conn, address = sock.accept()
-        connected_storages.append(address[0])
+        if address[0] not in connected_storages:
+            connected_storages.append(address[0])
 
         print 'Storage connected:', address
         sys.stdout.flush()
@@ -48,10 +49,7 @@ def clients_commands(conn):
         elif command == "cp":
             response = cp(client_pwd, connected_storages, args)
         elif command == "rm":
-            if len(args) == 2:
-                response = rm_dir(client_pwd, args[1])
-            else:
-                response = rm_file(client_pwd, args[0])
+            response = rm(client_pwd, args)
         elif command == "stat":
             response = stat(client_pwd, args)
         elif command == "init":

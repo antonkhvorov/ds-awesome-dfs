@@ -1,4 +1,5 @@
 import os
+import shutil
 
 from naming_server import fake_root
 from utils import format_path
@@ -74,14 +75,29 @@ def cp(client_pwd, connected_storages, args):
     return generate_ip_pairs(remote_address, file_size, chunks, connected_storages)
 
 
-def rm_file(client_pwd, args):
-    # TODO: implement method
-    return ' '.join(args)
+def rm(client_pwd, args):
+    if len(args) != 1:
+        return "Wrong number of arguments for rm"
 
+    path = os.path.normpath(format_path(client_pwd) + args[0])
+    real_path = os.path.normpath(fake_root + path)
 
-def rm_dir(client_pwd, args):
-    # TODO: implement method
-    return ' '.join(args)
+    if not os.path.exists(real_path):
+        return "Error path " + path + "not exists!"
+    else:
+        if os.path.isdir(real_path):
+            try:
+                shutil.rmtree(real_path)
+                return ""
+            except Exception as e:
+                return "Unable remove directory"
+
+        if os.path.isfile(real_path):
+            try:
+                os.remove(real_path)
+                return ""
+            except:
+                return "Unable to remove file"
 
 
 def stat(client_pwd, args):

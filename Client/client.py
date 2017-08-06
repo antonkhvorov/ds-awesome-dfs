@@ -32,7 +32,7 @@ def execute(sock, args):
                             "cd": [2],
                             "cp": [3],
                             "cat": [2],
-                            "rm": [2, 3],
+                            "rm": [2],
                             "stat": [2],
                             "init": [1]
                             }
@@ -81,13 +81,7 @@ def execute(sock, args):
         # remove temp directory
         shutil.rmtree(temp_dir)
     elif command == "rm":
-        if len(args) == 2:
-            rm_file(response)
-        elif len(args) == 3 and args[1] == "-r":
-            rm_dir(response)
-        else:
-            print "Wrong usage of the rm command"
-            help()
+        rm(response)
     elif command == "stat":
         stat(response)
     elif command == "init":
