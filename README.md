@@ -26,5 +26,6 @@ docker run -e NAMING_IP=<naming node ip> storage
 
 #### On client machine:
 ```
-python dfs.py <naming node ip>
+cd Client
+python client.py <naming node ip>
 ```
