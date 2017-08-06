@@ -1,11 +1,11 @@
 import os
 import socket
 
-
 from logger import get_logger
 from utils import send_message, recv_message, format_path
 
 logger = get_logger('client_commands')
+
 
 def pwd(response):
     logger.info('Command pwd response: %s' % response)
@@ -41,14 +41,15 @@ def cp(response, temp_dir):
                 chunk_data += chunk.read() + os.linesep
             print chunk_name
             print chunk_data
-            send_file_to_storage(line.split('|')[0], chunk_data)
+
+            data_structure = ["cp", chunk_data]
+            send_file_to_storage(line.split('|')[0], str(data_structure))
             # send copy of file to storage
-            if (line.split('|')[1] != ''):
-                send_file_to_storage(line.split('|')[1], chunk_data)
+            if line.split('|')[1] != '':
+                send_file_to_storage(line.split('|')[1], str(data_structure))
 
 
 def stat(response):
-    # TODO: implement method
     logger.info('Command stat response: %s' % response)
     print response
 
@@ -60,16 +61,24 @@ def rm(response):
 
 
 def init(response):
-    # TODO: implement method
     logger.info('Command init response: %s' % response)
     print response
 
+
 def cat(response):
-    for line in response.splitlines():
-        print(line)
+    remote_path = response[0].split('|')[0]
+    full_file = ''
+    for i, line in enumerate(response[1:]):
+        print '%s %s' % (i, line)
+        chunk_path = format_path(remote_path) + 'chunk_' + str(i) + '.txt'
+        chunk = request_chunk_from_storage(line.split('|')[0], str(["cat",chunk_path]))
+        if chunk == "400":
+            chunk = request_chunk_from_storage(line.split('|')[1], str(["cat", chunk_path]))
+        if chunk != "400":
+            full_file += chunk
+
+    print full_file
     logger.info('Command cat response was printed')
-
-
 
 
 def help():
@@ -85,16 +94,25 @@ def help():
     print "rm <file or directory> "
     print "stat <file or directory>"
     print "init"
-    logger.info('Command help response: comands were printed')
+    logger.info('Command help response: commands were printed')
 
 
 def send_file_to_storage(storage_ip, chunk_data):
     sock = socket.socket()
     sock.connect((storage_ip, 9004))
     send_message(sock, chunk_data)
-    logger.info('Command cp response: Sent %s to the storage %s' % (os.path.basename(chunk_data.splitlines()[0]), storage_ip))
+    logger.info(
+        'Command cp response: Sent %s to the storage %s' % (os.path.basename(chunk_data.splitlines()[0]), storage_ip))
     response = recv_message(sock)
     logger.info(
         'Command cp response: Storage %s response: %s' % (storage_ip, response))
     sock.close()
 
+
+def request_chunk_from_storage(storage_ip, chunk_path):
+    sock = socket.socket()
+    sock.connect((storage_ip, 9005))
+    send_message(sock, chunk_path)
+    response = recv_message(sock)
+    sock.close()
+    return response

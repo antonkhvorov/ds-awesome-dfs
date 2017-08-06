@@ -7,7 +7,7 @@ from threading import Thread
 from const import fake_root
 from utils import send_message, recv_message
 
-from commands import mkdir
+from commands import mkdir, cp, cat
 
 
 def connect_to_naming(naming_ip):
@@ -15,7 +15,7 @@ def connect_to_naming(naming_ip):
 
     sock.connect((naming_ip, 9000))
 
-    print "connected to", naming_ip
+    print "Connected to", naming_ip
     sys.stdout.flush()
 
 
@@ -49,16 +49,16 @@ def listen_for_naming_connections():
 
 def clients_commands(conn):
     request = recv_message(conn)
-    file = request.splitlines()[0]
-    chunk_name = os.path.normpath(fake_root + os.path.normpath(file))
-    filepath = os.path.dirname(file)
-    mkdir(filepath)
-    with open(chunk_name, "wb") as out_file:
-        for line in request.splitlines()[1:]:
-            out_file.write(line + os.linesep)
-    print 'Added ', chunk_name
-    response = 'OK'
-    send_message(conn, response)
+    if len(request) < 2:
+        return
+    command = request[0]
+
+    if command == "cp":
+        send_message(conn, cp(request[1]))
+
+    elif command == "cat":
+        send_message(conn, cat(request[1]))
+
 
 def naming_commands(conn):
     request = recv_message(conn)
@@ -68,6 +68,7 @@ def naming_commands(conn):
     with open(chunk_name, 'r') as chunk:
         chunk_data += chunk.read()
     send_message(conn, chunk_data)
+
 
 def receive_heartbeat():
     sock = socket.socket()
