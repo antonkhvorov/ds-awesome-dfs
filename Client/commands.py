@@ -20,11 +20,6 @@ def mkdir(response):
     print response
 
 
-def touch(response):
-    # TODO: implement method
-    print response
-
-
 def cp(response, temp_dir):
     original_file = response
     for i, line in enumerate(original_file.splitlines()):
@@ -49,6 +44,11 @@ def stat(response):
 
 
 def rm(response):
+    # TODO: implement method
+    print response
+
+
+def touch(response):
     # TODO: implement method
     print response
 
