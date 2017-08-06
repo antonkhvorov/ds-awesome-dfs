@@ -5,7 +5,7 @@ import os
 from threading import Thread
 
 from const import fake_root
-from utils import send_message, recv_message, format_path
+from utils import send_message, recv_message
 
 from commands import mkdir
 
