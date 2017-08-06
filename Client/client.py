@@ -103,7 +103,7 @@ if __name__ == "__main__":
     logger.info('Connected to the Naming server: %s' % naming_ip)
 
     while True:
-        sys.stdout.write('dfs>>>')
+        sys.stdout.write('dfs>>> ')
         args = raw_input()
         logger.info('Client pwd: %s ; Input string: %s' % (client_pwd, args))
         execute(sock, args.split())

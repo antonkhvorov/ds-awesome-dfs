@@ -28,4 +28,5 @@ docker run -e NAMING_IP=<naming node ip> storage
 ```
 cd Client
 python client.py <naming node ip>
+help
 ```
