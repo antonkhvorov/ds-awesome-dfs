@@ -85,5 +85,27 @@ def rm(client_pwd, args):
 
 
 def stat(client_pwd, args):
-    # TODO: implement method
-    return ' '.join(args)
+    if len(args) != 1:
+        return "Error not enough arguments! Use: stat <argument>"
+
+    path = os.path.normpath(format_path(client_pwd) + args[0])
+    real_path = os.path.normpath(fake_root + path)
+
+    if not os.path.exists(real_path):
+        return "Error path " + path + "not exists!"
+    else:
+        if os.path.isdir(real_path):
+            try:
+                listdir = os.listdir(real_path)
+                return "Directory " + path + " contains " + str(len(listdir)) + " items"
+            except Exception as e:
+                return "Unable to get directory stats!"
+
+        if os.path.isfile(real_path):
+            try:
+                with open(real_path) as f:
+                    file_data = f.readline().split("|")
+                    f.close()
+                    return "File size: " + file_data[1] + os.linesep + "Divided on: " + file_data[2] + " chunks"
+            except:
+                return "Unable to get file stats!"
