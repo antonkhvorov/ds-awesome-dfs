@@ -1,14 +1,14 @@
 import shutil
-import socket
 import sys
 import tempfile
 
 from chunks_creator import create_chunks
-from utils import recv_message, send_message
 from commands import *
 from logger import get_logger
+
 client_pwd = "/"
 logger = get_logger('client_dfs')
+
 
 def execute(sock, args):
     if len(args) == 0:
@@ -29,16 +29,15 @@ def execute(sock, args):
         return
 
     number_of_arguments = {"pwd": [1],
-                            "ls": [1, 2],
-                            "mkdir": [2],
-                            "cd": [2],
-                            "cp": [3],
-                            "cat": [2],
-                            "rm": [2, 3],
-                            "stat": [2],
-                            "init": [1]
-                            }
-
+                           "ls": [1, 2],
+                           "mkdir": [2],
+                           "cd": [2],
+                           "cp": [3],
+                           "cat": [2],
+                           "rm": [2, 3],
+                           "stat": [2],
+                           "init": [1]
+                           }
 
     if command not in number_of_arguments:
         print "There is no command %s" % command

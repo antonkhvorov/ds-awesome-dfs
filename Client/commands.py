@@ -56,9 +56,9 @@ def rm(response):
     print response
 
 
-def touch(response):
+def init(response):
     # TODO: implement method
-    logger.info('Command touch response: %s' % response)
+    logger.info('Command init response: %s' % response)
     print response
 
 
