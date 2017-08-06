@@ -43,12 +43,17 @@ def stat(response):
     print response
 
 
-def rm(response):
+def rm_file(response):
     # TODO: implement method
     print response
 
 
-def touch(response):
+def rm_dir(response):
+    # TODO: implement method
+    print response
+
+
+def init(response):
     # TODO: implement method
     print response
 

@@ -53,11 +53,6 @@ def mkdir(client_pwd, args):
         return "Directory " + format_path(args[0]) + " already exists!"
 
 
-def touch(client_pwd, args):
-    # TODO: implement method
-    return ' '.join(args)
-
-
 # args[0] - remote_path
 # args[1] - filename
 # args[2] - file size
@@ -79,7 +74,12 @@ def cp(client_pwd, connected_storages, args):
     return generate_ip_pairs(remote_address, file_size, chunks, connected_storages)
 
 
-def rm(client_pwd, args):
+def rm_file(client_pwd, args):
+    # TODO: implement method
+    return ' '.join(args)
+
+
+def rm_dir(client_pwd, args):
     # TODO: implement method
     return ' '.join(args)
 
@@ -109,3 +109,8 @@ def stat(client_pwd, args):
                     return "File size: " + file_data[1] + os.linesep + "Divided on: " + file_data[2] + " chunks"
             except:
                 return "Unable to get file stats!"
+
+
+def init(client_pwd, args):
+    # TODO: implement method
+    return ' '.join(args)

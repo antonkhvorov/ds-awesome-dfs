@@ -45,14 +45,17 @@ def clients_commands(conn):
             response = cd(client_pwd, args)
         elif command == "mkdir":
             response = mkdir(client_pwd, args)
-        elif command == "touch":
-            response = touch(client_pwd, args)
-        elif command == "scp":
+        elif command == "cp":
             response = cp(client_pwd, connected_storages, args)
         elif command == "rm":
-            response = rm(client_pwd, args)
+            if len(args) == 2:
+                response = rm_dir(client_pwd, args[1])
+            else:
+                response = rm_file(client_pwd, args[0])
         elif command == "stat":
             response = stat(client_pwd, args)
+        elif command == "init":
+            response = init(client_pwd, args)
 
         send_message(conn, response)
 
